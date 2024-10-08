@@ -24,8 +24,7 @@ const commands = [
     command: "wallet",
     description: "Fetch your wallet details 🤑",
   },
-  { command: "send", description: "Send ETH to any other wallet💳" },
-  { command: "demo", description: "Simple demo for a conversation" },
+  { command: "send", description: "Send ETH to any other wallet 💳" },
 ];
 bot.api.setMyCommands(commands);
 
