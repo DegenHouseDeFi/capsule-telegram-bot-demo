@@ -1,75 +1,51 @@
-# Capsule Telegram Bot
+# Capsule Demo Telegram Bot
 
-This is a demo telegram bot powered by [Capsule pregen wallets](https://usecapsule.com/), it contains implementations for wallet creation and basic transactions of ETH on [Base](https://www.base.org/).
+This project is a Telegram bot to demo the usage of [Capsule](https://usecapsule.com) and more specifically, [Pregen Wallets](https://docs.usecapsule.com/integration-guides/wallet-pregeneration) by Capsule to safely and securely create wallets and sign transactions.
 
-## Overview
+## Features
 
-Project Structure -
+- Generates a pregen wallet for the user with their telegram identifier. 
+- Users can load up the generated wallet with ETH and send ETH to others through the bot. (The functionality is for the sole purpose to demo transaction signing with Capsule & Viem)
 
-```bash
-CAPSULE-TELEGRAM-BOT
-|
-|_src
-     |_index.ts
-     |
-     |_db
-         |_connection.ts
-         |_models.ts
-     |
-     |_utils
-           |_callbacks.ts
-           |_wallet.ts
-           |-types.ts
-```
+## Installation
 
-- We are using mongodb to store data -- this is the [src/db/schema](https://github.com/DegenHouseDeFi/capsule-telegram-bot/blob/main/src/db/models.ts) of that db which stores users.
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/DegenHouseDeFi/capsule-telegram-bot-demo
+    ```
+2. Navigate to the project directory:
+    ```sh
+    cd capsule-telegram-bot-demo
+    ```
+3. Install dependencies:
+    ```sh
+    yarn # or npm i
+    ```
 
-- All the commands supported in this bot are present in [src/index.ts](https://github.com/DegenHouseDeFi/capsule-telegram-bot/blob/main/src/index.ts)
+## Usage
 
-- The core functionality of all the commands is available in [src/utils/callbacks.ts](https://github.com/DegenHouseDeFi/capsule-telegram-bot/blob/main/src/utils/callbacks.ts)
+1. Set up your environment variables:
+    ```sh
+    cp .env.example .env
+    ```
+    Edit the `.env` file with your variables. 
 
-## Commands
+    - `BOT_TOKEN` - Acquire a Telegram Bot Key from [BotFather](https://t.me/BotFather) (super easy)
+    - `MONGO_URI` - This demo uses MongoDB to store user data. 
+    - `CAPSULE_API_KEY` - Generate the API Key at the [Developer Console](https://developer.usecapsule.com/)
+    - `RPC` - The Bot is configured to be running on [Base](https://base.org). Either put in a Base RPC or a local fork of Base running on Anvil. 
+    - `DOMAIN` - As Capsule currently doesn't support Telegram IDs as an identifier, we use a work-around that appends the `DOMAIN` to a users TG ID. For example, Telegram ID `11211` becomes `11211@{DOMAIN}`. You can use any domain that you control over here. 
 
-1. Start Command
+2. Start the bot:
+    ```sh
+    yarn start # or yarn dev for hot-reloading
+    ```
 
-```bash
-/start
-```
+## Contributing
 
-This command starts the bot and checks if the account is already generated for the associated telegramId of the user, if not then it generates the account and stores it in the mongodb database.
+Contributions are welcome! Please open an issue or submit a pull request. If you have any questions, feel free to shoot an email at `gm@degenhouse.sh`.
 
-![start](https://res.cloudinary.com/dntuhdt9d/image/upload/v1727439626/Capsule%20Telegram%20Bot/o87rld91i3zpakwgedhu.png)
 
-2. Wallet Command
+## Note
 
-```bash
-/wallet
-```
-
-This commands fetches the wallet address and it's ETH balance
-
-Wallet before topping up ETH
-
-![walletb4topup](https://res.cloudinary.com/dntuhdt9d/image/upload/v1727439626/Capsule%20Telegram%20Bot/ongbk6pgjmu9pvzxelrx.png)
-
-Wallet after topping up ETH
-
-![walletaftertopup](https://res.cloudinary.com/dntuhdt9d/image/upload/v1727440088/Capsule%20Telegram%20Bot/ocwtck9lskjqr9lzny4c.png)
-
-3. Sending Funds to another wallet
-
-```bash
-/send
-```
-
-1st Step -- Sending the receiver's address
-
-![step1](https://res.cloudinary.com/dntuhdt9d/image/upload/v1727439626/Capsule%20Telegram%20Bot/onbjrk1smd99be5ba7g3.png)
-
-2nd Step -- Sending the amount of ETH to be transferred
-
-![step2](https://res.cloudinary.com/dntuhdt9d/image/upload/v1727439626/Capsule%20Telegram%20Bot/s01zredp7udzvalv1qjn.png)
-
-Confirmation after transaction goes through
-
-![confirmation](https://res.cloudinary.com/dntuhdt9d/image/upload/v1727439626/Capsule%20Telegram%20Bot/ydi9xbssm0fhvispy35u.png)
+- We highly recommend encrypting the `userShare` before storing it in database for production use-cases. 
