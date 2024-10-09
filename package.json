@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "keywords": [],
   "author": "Rohan Pahwa <rohan@degenhouse.sh>",
@@ -23,6 +24,7 @@
     "express": "^4.21.0",
     "grammy": "^1.30.0",
     "mongoose": "^8.6.3",
+    "nodemon": "^3.1.7",
     "viem": "^2.21.15"
   }
 }

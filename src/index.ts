@@ -45,7 +45,11 @@ bot.use(createConversation(transferConversation, "send"));
  */
 bot.command("start", async (ctx) => {
   // Send initial welcome message
-  await ctx.reply(`Welcome! This bot is powered by usecapsule.com`);
+  await ctx.reply(`Welcome! This bot is powered by <a href="https://usecapsule.com">Capsule</a> to securely generate, store, and manage user wallets 💫`,
+    {
+      parse_mode: "HTML",
+    }
+  );
 
   // Call handleStart to check if the user is already registered or to create a new account
   await handleStart(ctx);

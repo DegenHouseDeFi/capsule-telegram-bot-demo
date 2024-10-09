@@ -1,6 +1,6 @@
 import { generateAccount, sendTransaction } from "./wallet";
 import { User } from "../db/models";
-import { createPublicClient, http, formatEther } from "viem";
+import { createPublicClient, http, formatEther, isAddress } from "viem";
 import { base } from "viem/chains";
 import { BotContext } from "./types";
 import { type Conversation } from "@grammyjs/conversations";
@@ -27,18 +27,21 @@ export async function handleStart(ctx: BotContext): Promise<void> {
 
   if (user) {
     await ctx.reply(
-      `<b>Looks like you are already registered !</b>\n\n<b>👜 Address:</b> <code>${user.address}</code>`,
+      `🚨 Looks like you are already registered!`,
       { parse_mode: "HTML", link_preview_options: { is_disabled: true } }
     );
+
+    await handleWallet(ctx);
   } else {
     try {
+      const msg = await ctx.reply(`♻️ Generating your wallet...(this may take a few seconds)`);
       // Create a new account
       const account = await generateAccount(telegramId);
       const userShare = account.share;
       const walletAddress = account.wallet.address;
 
       if (!walletAddress) {
-        await ctx.reply("Failed to create an account. Please try again.");
+        await ctx.api.editMessageText(msg.chat.id, msg.message_id, "😓 Failed to create an account. Please try again.");
         return;
       }
 
@@ -52,10 +55,8 @@ export async function handleStart(ctx: BotContext): Promise<void> {
 
       await user.save();
 
-      await ctx.reply(
-        `<b>🎉 Your wallet has been created!</b>\n\n<b>👜 Address:</b> <code>${walletAddress}</code>`,
-        { parse_mode: "HTML", link_preview_options: { is_disabled: true } }
-      );
+      await ctx.api.editMessageText(msg.chat.id, msg.message_id, "<b>🎉 Your wallet has been created!</b>", { parse_mode: "HTML" });
+      await handleWallet(ctx);
     } catch (err) {
       console.error(err);
       await ctx.reply(
@@ -164,7 +165,7 @@ export async function transferConversation(
   const destAddress = destAddressMessage.message.text;
 
   // Validate Ethereum address format
-  if (!destAddress.startsWith("0x") || destAddress.length !== 42) {
+  if (!isAddress(destAddress)) {
     await ctx.reply(
       "Invalid Ethereum address. Please provide a valid address."
     );
@@ -180,22 +181,20 @@ export async function transferConversation(
 
   const amountMessage = await conversation.waitFor("message:text");
   const amountInETH = amountMessage.message.text;
+  const msg = await ctx.reply(`♻️ Sending ${amountInETH} ETH to ${destAddress}...`);
 
   // Step 3: Validate amount (ensure it's a valid number)
   if (isNaN(parseFloat(amountInETH)) || parseFloat(amountInETH) <= 0) {
-    await ctx.reply("Please provide a valid amount of ETH to send.");
+    await ctx.api.editMessageText(msg.chat.id, msg.message_id, "🚨 Invalid amount. Please provide a valid amount of ETH to send.");
     return;
   }
 
   // Step 4: Perform the transaction
   try {
     const res = await sendTransaction(user, amountInETH, destAddress);
-
-    await ctx.reply(
-      `Successfully sent ${amountInETH} ETH to ${destAddress}. Transaction Hash: ${res.tx}`
-    );
+    await ctx.api.editMessageText(msg.chat.id, msg.message_id, `✅ Successfully sent <code>${amountInETH} ETH</code> to <code>${destAddress}</code>.\n\nTransaction Hash: <code>${res.tx}</code>`, { parse_mode: "HTML" });
   } catch (error) {
     console.error("Error sending transaction:", error);
-    await ctx.reply("Failed to send transaction. Please try again.");
+    await ctx.api.editMessageText(msg.chat.id, msg.message_id, "🚨 Failed to send transaction. Please try again.");
   }
 }

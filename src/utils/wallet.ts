@@ -6,6 +6,7 @@ import { http } from "viem";
 
 dotenv.config();
 const CAPSULE_API_KEY = process.env.CAPSULE_API_KEY;
+const DOMAIN = process.env.DOMAIN;
 
 /**
  * Generates a new Ethereum wallet using Capsule SDK.
@@ -21,7 +22,7 @@ export async function generateAccount(telegramId: string) {
   // Capsule supports EVM, Solana and Cosmos wallets.
   const pregenWallet = await capsule.createWalletPreGen(
     WalletType.EVM,
-    `${telegramId}@test.com`
+    `${telegramId}@${DOMAIN}`
   );
   const share = capsule.getUserShare();
 
@@ -53,7 +54,7 @@ export async function sendTransaction(
   receiverAddress: string
 ): Promise<{ tx: any }> {
   // Format the receiver address to ensure it's valid and compatible with Viem
-  const formattedReceiverAddress = receiverAddress as `0x${string}`;
+  const typedReceiver = receiverAddress as `0x${string}`;
 
   // Initialize Capsule with the user's share to authenticate the transaction
   const capsule = new Capsule(
@@ -73,7 +74,7 @@ export async function sendTransaction(
 
   // Main transaction body
   const tx = await client.sendTransaction({
-    to: formattedReceiverAddress, // Recipient's Ethereum address
+    to: typedReceiver, // Recipient's Ethereum address
     value: amountInWei, // Amount to send in Wei
     account: client.account!, // Sender's account information
     chain: base, // Ethereum chain to process the transaction
