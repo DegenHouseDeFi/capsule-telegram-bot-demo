@@ -7,8 +7,10 @@ import { Schema, model, Document } from "mongoose";
 interface IUser extends Document {
   telegramId: string; // Telegram user ID, unique to each user
   username: string; // Username of the user on Telegram
-  address: string; // User's associated address (generated using capsule sdk)
-  userShare: string; // User share is a crucial component of Capsule's 2/2 MPC (Multi-Party Computation) system
+  evmAddress: string; // User's associated Ethereum address (generated using Capsule SDK)
+  evmUserShare: string; // User share is a crucial component of Capsule's 2/2 MPC (Multi-Party Computation) system
+  solanaAddress: string; // User's Solana address
+  solanaUserShare: string; // User's Solana UserShare
 }
 
 /**
@@ -18,8 +20,10 @@ interface IUser extends Document {
 const userSchema = new Schema<IUser>({
   telegramId: { type: String, required: true, unique: true }, // Unique Telegram ID for each user, required field
   username: { type: String, required: true }, // Username of the user, required field
-  address: { type: String, required: true }, // User's address, required field
-  userShare: { type: String, required: true }, // User's share in the system, required field
+  evmAddress: { type: String, required: true }, // User's Ethereum address, required field
+  evmUserShare: { type: String, required: true }, // User's Ethereum share in the system, required field
+  solanaAddress: { type: String, required: true }, // User's Solana address, required field
+  solanaUserShare: { type: String, required: true }, // User's Solana share in the system, required field
 });
 
 /**
