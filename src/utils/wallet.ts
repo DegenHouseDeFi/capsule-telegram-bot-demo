@@ -116,7 +116,6 @@ export async function generateSolanaAccount(telegramId: string) {
   return { wallet: pregenWallet, share };
 }
 
-
 /**
  * Send a transaction on the Solana network using Capsule.
  *
@@ -145,7 +144,7 @@ export async function sendSolanaTransaction(
     // Set the user share for the Solana wallet
     capsule.setUserShare(user.solanaUserShare);
 
-    // Setup Solana connection to Devnet
+    // Setup Solana connection to Devnet : You can change this to mainnet or testnet or use a custom RPC
     const solanaConnection = new solana.Connection(
       solana.clusterApiUrl("devnet"),
       "confirmed"
@@ -170,7 +169,9 @@ export async function sendSolanaTransaction(
       throw new Error("Invalid recipient public key.");
     }
 
-    const { blockhash } = await solanaConnection.getLatestBlockhash("confirmed");
+    const { blockhash } = await solanaConnection.getLatestBlockhash(
+      "confirmed"
+    );
 
     const transaction = new Transaction();
     transaction.recentBlockhash = blockhash;

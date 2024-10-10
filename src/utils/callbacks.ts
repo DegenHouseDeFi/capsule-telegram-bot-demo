@@ -143,7 +143,7 @@ export async function handleWallet(ctx: BotContext): Promise<void> {
       }
     );
 
-    // Fetch Solana wallet balance using Solana's web3.js
+    // Fetch Solana wallet balance using Solana's web3.js : You can change the environment to mainnet/testnet or use a custom RPC
     const solanaConnection = new solana.Connection(
       solana.clusterApiUrl("devnet"),
       "confirmed"
@@ -166,7 +166,7 @@ export async function handleWallet(ctx: BotContext): Promise<void> {
 }
 
 /**
- * Handle the /send command for the Telegram bot.
+ * Handle the /sendeth command for the Telegram bot.
  * Prompts the user to provide a wallet address for sending funds and the amount of ETH to be send.
  *
  * @param {Conversation} conversation - The conversation instance that manages the multi-step interaction.
@@ -326,11 +326,15 @@ export async function transferSOLConversation(
 
   // Step 4: Perform the SOL transaction using Capsule
   try {
-    const res = await sendSolanaTransaction(user, destAddress, parseFloat(amountInSOL));
+    const res = await sendSolanaTransaction(
+      user,
+      destAddress,
+      parseFloat(amountInSOL)
+    );
     await ctx.api.editMessageText(
       msg.chat.id,
       msg.message_id,
-      `✅ Successfully sent <code>${amountInSOL} SOL</code> to <code>${destAddress}</code>.\n\nTransaction Hash: <code>${res.txHash}</code>`,
+      `✅ Successfully sent <code>${amountInSOL} SOL</code> to <code>${destAddress}</code>.\n\nTransaction Hash: <code>${res.tx}</code>`,
       { parse_mode: "HTML" }
     );
   } catch (error) {
