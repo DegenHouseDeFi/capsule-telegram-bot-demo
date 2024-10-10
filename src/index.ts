@@ -5,10 +5,10 @@ import {
   handleWallet,
   transferETHConversation,
   transferSOLConversation,
-} from "./utils/callbacks";
+} from "./lib/callbacks";
 import express from "express";
 import { connectDB } from "./db/connection";
-import { BotContext } from "./utils/types";
+import { BotContext } from "./lib/types";
 import { conversations, createConversation } from "@grammyjs/conversations";
 
 dotenv.config();

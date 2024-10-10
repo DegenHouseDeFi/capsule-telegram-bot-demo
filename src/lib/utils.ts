@@ -153,16 +153,11 @@ export async function sendSolanaTransaction(
     // Initialize Capsule Solana signer
     const solanaSigner = new CapsuleSolanaWeb3Signer(capsule, solanaConnection);
 
-    // Log the Solana Signer address to ensure it's valid
-    console.log("Solana Signer Address:", solanaSigner.address);
-
     // Convert the Solana Signer address to a valid PublicKey
     const fromPublicKey = new PublicKey(user.solanaAddress);
-    console.log("Sender Public Key:", fromPublicKey.toString());
-
+    
     // Validate and log the recipient's public key
     const toPublicKey = new PublicKey(destAddress);
-    console.log("Recipient Public Key:", toPublicKey.toString());
 
     // Ensure the recipient's public key is valid
     if (!PublicKey.isOnCurve(toPublicKey)) {

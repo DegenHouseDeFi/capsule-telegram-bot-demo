@@ -3,7 +3,7 @@ import {
   sendTransaction,
   generateSolanaAccount,
   sendSolanaTransaction,
-} from "./wallet";
+} from "./utils";
 import { User } from "../db/models";
 import { createPublicClient, http, formatEther, isAddress } from "viem";
 import { base } from "viem/chains";
