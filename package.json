@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@grammyjs/conversations": "^1.2.0",
+    "@solana/web3.js": "^1.95.3",
     "@usecapsule/server-sdk": "^2.0.1",
+    "@usecapsule/solana-web3.js-v1-integration": "^1.3.0",
     "@usecapsule/viem-v2-integration": "^2.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",

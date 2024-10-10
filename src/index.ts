@@ -3,7 +3,8 @@ import { Bot, session } from "grammy";
 import {
   handleStart,
   handleWallet,
-  transferConversation,
+  transferETHConversation,
+  transferSOLConversation,
 } from "./utils/callbacks";
 import express from "express";
 import { connectDB } from "./db/connection";
@@ -24,7 +25,8 @@ const commands = [
     command: "wallet",
     description: "Fetch your wallet details 🤑",
   },
-  { command: "send", description: "Send ETH to any other wallet 💳" },
+  { command: "sendeth", description: "Send ETH to any other wallet 💳" },
+  { command: "sendsol", description: "Send SOL to any other wallet 💳" },
 ];
 bot.api.setMyCommands(commands);
 
@@ -37,7 +39,8 @@ bot.use(
 
 // Register conversations middleware
 bot.use(conversations());
-bot.use(createConversation(transferConversation, "send"));
+bot.use(createConversation(transferETHConversation, "sendeth"));
+bot.use(createConversation(transferSOLConversation, "sendsol"));
 
 /**
  * Handle the /start command.
@@ -45,7 +48,8 @@ bot.use(createConversation(transferConversation, "send"));
  */
 bot.command("start", async (ctx) => {
   // Send initial welcome message
-  await ctx.reply(`Welcome! This bot is powered by <a href="https://usecapsule.com">Capsule</a> to securely generate, store, and manage user wallets 💫`,
+  await ctx.reply(
+    `Welcome! This bot is powered by <a href="https://usecapsule.com">Capsule</a> to securely generate, store, and manage user wallets 💫`,
     {
       parse_mode: "HTML",
     }
@@ -64,11 +68,19 @@ bot.command("wallet", async (ctx) => {
 });
 
 /**
- * Handle the /send command.
+ * Handle the /sendeth command.
  * Initiates the send process by asking the user for the recipient's wallet address and amount of ETH to be sent.
  */
-bot.command("send", async (ctx) => {
-  await ctx.conversation.enter("send");
+bot.command("sendeth", async (ctx) => {
+  await ctx.conversation.enter("sendeth");
+});
+
+/**
+ * Handle the /sendsol command.
+ * Initiates the send process by asking the user for the recipient's wallet address and amount of SOL to be sent.
+ */
+bot.command("sendsol", async (ctx) => {
+  await ctx.conversation.enter("sendsol");
 });
 
 // Create an Express server for handling HTTP requests
