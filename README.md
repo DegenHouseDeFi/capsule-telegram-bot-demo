@@ -4,8 +4,8 @@ This project is a Telegram bot to demo the usage of [Capsule](https://usecapsule
 
 ## Features
 
-- Generates a pregen EVM and SOLANA wallet for the user with their telegram identifier.
-- Users can load up the generated wallet with ETH and SOL respectively and send them to others through the bot. (The functionality is for the sole purpose to demo transaction signing with Capsule ,Viem & @solana/web3.js) 
+- Generates a pregen EVM and a SOLANA wallet for the user with their telegram identifier.
+- Users can load up the generated wallets with ETH and SOL, respectively, and send them to others through the bot. (The functionality is for the sole purpose to demo transaction signing with Capsule ,Viem & @solana/web3.js)  
 
 ## Installation
 
